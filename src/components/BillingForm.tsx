@@ -51,7 +51,9 @@ const BillingForm = ({ subscriptionPlan }: BillingFormProps) => {
             <CardDescription>
               You are currently on the{" "}
               <strong>
-                {subscriptionPlan.name ? "Free" : subscriptionPlan.name}
+                {subscriptionPlan.name === undefined
+                  ? "Free"
+                  : subscriptionPlan.name}
               </strong>{" "}
               plan.
             </CardDescription>
