@@ -2,11 +2,9 @@
 import { Pinecone } from "@pinecone-database/pinecone";
 
 export const getPineconeIndex = async () => {
-  const pinecone = new Pinecone();
-  // @ts-ignore
-  await pinecone.init({
-    environment: "gcp-starter",
+  const pinecone = await new Pinecone({
     apiKey: process.env.PINECONE_API_KEY!,
+    environment: "gcp-starter",
   });
   const index = pinecone.Index("componentify");
 
