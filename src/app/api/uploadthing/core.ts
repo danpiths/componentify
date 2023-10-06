@@ -5,7 +5,7 @@ import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { PDFLoader } from "langchain/document_loaders/fs/pdf";
 import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 import { PineconeStore } from "langchain/vectorstores/pinecone";
-import { getPineconeClient } from "@/lib/pinecone";
+import { getPineconeIndex } from "@/lib/pinecone";
 import { getUserSubscriptionPlan } from "@/lib/stripe";
 import { PLANS } from "@/config/stripe";
 
@@ -84,14 +84,14 @@ const onUploadComplete = async ({
     }
 
     // vectorize and index entire document
-    const pinecone = await getPineconeClient();
-    const pineconeIndex = pinecone.Index("componentify");
+    const pineconeIndex = await getPineconeIndex();
 
     const embeddings = new OpenAIEmbeddings({
       openAIApiKey: process.env.OPENAI_API_KEY,
     });
 
     await PineconeStore.fromDocuments(pageLevelDocs, embeddings, {
+      // @ts-ignore
       pineconeIndex,
       namespace: createdFile.id,
     });
