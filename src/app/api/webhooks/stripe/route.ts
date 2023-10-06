@@ -1,20 +1,17 @@
 import { db } from "@/db";
 import { stripe } from "@/lib/stripe";
-import { buffer } from "micro";
 import { headers } from "next/headers";
 import type Stripe from "stripe";
 
 export async function POST(request: Request) {
-  // const body = await request.text();
+  const body = await request.text();
   const signature = headers().get("Stripe-Signature") ?? "";
-  // @ts-ignore
-  const reqBuffer = await buffer(request);
 
   let event: Stripe.Event;
 
   try {
     event = stripe.webhooks.constructEvent(
-      reqBuffer,
+      body,
       signature,
       process.env.STRIPE_WEBHOOK_SECRET || ""
     );
