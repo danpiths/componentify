@@ -3,9 +3,15 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import Image from "next/image";
-import { RegisterLink } from "@kinde-oss/kinde-auth-nextjs/server";
+import {
+  RegisterLink,
+  getKindeServerSession,
+} from "@kinde-oss/kinde-auth-nextjs/server";
 
 export default function Home() {
+  const { getUser } = getKindeServerSession();
+  const user = getUser();
+
   return (
     <>
       <MaxWidthWrapper className="mb-12 mt-28 sm:mt-40 flex flex-col items-center justify-center text-center">
@@ -23,14 +29,27 @@ export default function Home() {
           Simply upload your file and start asking questions right away.
         </p>
 
-        <RegisterLink
-          className={buttonVariants({
-            size: "lg",
-            className: "mt-5",
-          })}
-        >
-          Get started <ArrowRight className="ml-2 h-5 w-5" />
-        </RegisterLink>
+        {!user || !user.id ? (
+          <RegisterLink
+            className={buttonVariants({
+              size: "lg",
+              className: "mt-5",
+            })}
+          >
+            Get started <ArrowRight className="ml-2 h-5 w-5" />
+          </RegisterLink>
+        ) : (
+          <Link
+            className={buttonVariants({
+              size: "lg",
+              className: "mt-5",
+            })}
+            href="/dashboard"
+            target="_blank"
+          >
+            Get started <ArrowRight className="ml-2 h-5 w-5" />
+          </Link>
+        )}
       </MaxWidthWrapper>
 
       {/* value proposition section */}
