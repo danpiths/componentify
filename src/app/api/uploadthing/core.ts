@@ -53,7 +53,7 @@ const onUploadComplete = async ({
 
   try {
     const response = await fetch(
-      `https://uploadthing-prod.s3.us-west-2.amazonaws.com/${file.key}`
+      `https://uploadthing-prod.s3.us-west-2.amazonaws.com/${file.key}`,
     );
 
     const blob = await response.blob();
@@ -68,9 +68,9 @@ const onUploadComplete = async ({
     const { isSubscribed } = subscriptionPlan;
 
     const isProExceeded =
-      pagesAmt > PLANS.find(plan => plan.name === "Pro")!.pagesPerPdf;
+      pagesAmt > PLANS.find((plan) => plan.name === "Pro")!.pagesPerPdf;
     const isFreeExceeded =
-      pagesAmt > PLANS.find(plan => plan.name === "Free")!.pagesPerPdf;
+      pagesAmt > PLANS.find((plan) => plan.name === "Free")!.pagesPerPdf;
 
     if ((isSubscribed && isProExceeded) || (!isSubscribed && isFreeExceeded)) {
       await db.file.update({
